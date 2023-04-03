@@ -9,9 +9,10 @@ export interface Month {
   month: string
   revenue: number
   expenses: number
-  nonOperatingExpenses: number
-  operatingExpenses: number
+  nonOperationalExpenses: number
+  operationalExpenses: number
 }
+
 export interface Day {
   id: string
   date: string

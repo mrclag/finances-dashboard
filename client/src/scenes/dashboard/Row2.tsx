@@ -58,7 +58,8 @@ const Row2 = () => {
       })
     )
   }, [productData])
-
+  
+  
   return (
     <>
       <DashboardBox gridArea="d">

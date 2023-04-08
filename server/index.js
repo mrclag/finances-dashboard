@@ -11,6 +11,7 @@ import KPI from "./models/KPI.js"
 import Product from "./models/Product.js"
 import productRoutes from "./routes/product.js"
 import transactionRoutes from "./routes/transaction.js"
+import notionRoutes from "./routes/notion.js"
 import Transaction from "./models/Transaction.js"
 
 // CONFIG
@@ -26,6 +27,7 @@ app.use(cors())
 app.use("/kpi", kpiRoutes)
 app.use("/product", productRoutes)
 app.use("/transaction", transactionRoutes)
+app.use("/notion", notionRoutes)
 
 const PORT = process.env.PORT || 9000
 

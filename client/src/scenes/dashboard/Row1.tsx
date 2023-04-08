@@ -1,6 +1,6 @@
 import BoxHeader from "@/components/BoxHeader"
 import DashboardBox from "@/components/DashboardBox"
-import { useGetKpisQuery } from "@/state/api"
+import { useGetHandstandsQuery, useGetKpisQuery } from "@/state/api"
 import { MonitorHeart } from "@mui/icons-material"
 import { useTheme } from "@mui/system"
 import React, { useMemo } from "react"
@@ -21,53 +21,48 @@ import {
 
 type Props = {}
 
+interface Result {
+  date: string
+  number: number
+  name?: string
+}
+
 const Row1 = (props: Props) => {
-  const { data } = useGetKpisQuery()
+  const { data } = useGetHandstandsQuery()
   const { palette } = useTheme()
+  console.log("data", data)
 
-  const revenue = useMemo(() => {
-    return (
-      data &&
-      data[0].monthlyData.map(({ month, revenue }) => {
-        return {
-          name: month.substring(0, 3),
-          revenue: revenue,
-        }
-      })
-    )
+  const pushupsByDay = useMemo(() => {
+    if (!data) return []
+    const result = data.reduce((acc: any, curr) => {
+      if (curr.date) {
+        const date = new Date(curr.date).toISOString().substring(0, 10)
+        const newDate = { date, number: curr.number, day: curr.day }
+        if (!acc[date]) acc[date] = newDate
+        else acc[date].number += curr.number
+      }
+      return acc
+    }, {})
+
+    const sortedResult = Object.values(result).sort((a: any, b: any) => {
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      const dayOfWeekA = daysOfWeek.indexOf(a?.day)
+      const dayOfWeekB = daysOfWeek.indexOf(b?.day)
+      return dayOfWeekA - dayOfWeekB
+    })
+    console.log("sorted", sortedResult)
+
+    return sortedResult
   }, [data])
 
-  const revenueExpenses = useMemo(() => {
-    return (
-      data &&
-      data[0].monthlyData.map(({ month, revenue, expenses }) => {
-        return {
-          name: month.substring(0, 3),
-          revenue: revenue,
-          expenses: expenses,
-        }
-      })
-    )
-  }, [data])
-
-  const revenueProfit = useMemo(() => {
-    return (
-      data &&
-      data[0].monthlyData.map(({ month, revenue, expenses }) => {
-        return {
-          name: month.substring(0, 3),
-          revenue: revenue,
-          profit: (revenue - expenses).toFixed(2),
-        }
-      })
-    )
-  }, [data])
+  console.log(pushupsByDay)
+  // func
 
   return (
     <>
       <DashboardBox gridArea="a">
         <BoxHeader
-          title="revenue and expenses"
+          title="Pushups by Day"
           subtitle="subtitle line"
           sideText="+4%"
         />
@@ -75,7 +70,7 @@ const Row1 = (props: Props) => {
           <AreaChart
             width={500}
             height={400}
-            data={revenueExpenses}
+            data={pushupsByDay}
             margin={{
               top: 15,
               right: 25,
@@ -110,7 +105,7 @@ const Row1 = (props: Props) => {
               </linearGradient>
             </defs>
             <XAxis
-              dataKey="name"
+              dataKey="day"
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
@@ -118,12 +113,12 @@ const Row1 = (props: Props) => {
               tickLine={false}
               axisLine={{ strokeWidth: "0" }}
               style={{ fontSize: "10px" }}
-              domain={[8000, 23000]}
+              // domain={[8000, 23000]}
             />
             <Tooltip />
             <Area
               type="monotone"
-              dataKey="revenue"
+              dataKey="number"
               dot={true}
               stroke={palette.primary.main}
               fillOpacity={1}
@@ -146,7 +141,7 @@ const Row1 = (props: Props) => {
           subtitle="top line represents revenue, bottom line represents expenses"
           sideText="+4%"
         />
-        <ResponsiveContainer width="100%" height="100%">
+        {/* <ResponsiveContainer width="100%" height="100%">
           <LineChart
             width={500}
             height={400}
@@ -197,7 +192,7 @@ const Row1 = (props: Props) => {
               stroke={palette.primary.main}
             />
           </LineChart>
-        </ResponsiveContainer>
+        </ResponsiveContainer> */}
       </DashboardBox>
       <DashboardBox gridArea="c">
         <BoxHeader
@@ -205,7 +200,7 @@ const Row1 = (props: Props) => {
           subtitle="graph representing the revenue month by month"
           sideText="+4%"
         />
-        <ResponsiveContainer width="100%" height="100%">
+        {/* <ResponsiveContainer width="100%" height="100%">
           <BarChart
             width={500}
             height={300}
@@ -246,7 +241,7 @@ const Row1 = (props: Props) => {
             <Tooltip />
             <Bar dataKey="revenue" fill="url(#colorRevenue)" />
           </BarChart>
-        </ResponsiveContainer>
+        </ResponsiveContainer> */}
       </DashboardBox>
     </>
   )

@@ -1,8 +1,15 @@
 import BoxHeader from "@/components/BoxHeader"
 import DashboardBox from "@/components/DashboardBox"
 import { useGetHandstandsQuery, useGetKpisQuery } from "@/state/api"
+import {
+  getMaxDailyPushups,
+  getTotalAndAvgPushups,
+  sortByDate,
+} from "@/utils/pushups"
 import { MonitorHeart } from "@mui/icons-material"
+import { Box } from "@mui/material"
 import { useTheme } from "@mui/system"
+import { DataGrid, GridCellParams } from "@mui/x-data-grid"
 import React, { useMemo } from "react"
 import {
   Area,
@@ -27,36 +34,37 @@ interface Result {
   name?: string
 }
 
-const Row1 = (props: Props) => {
+const Col1 = (props: Props) => {
   const { data } = useGetHandstandsQuery()
   const { palette } = useTheme()
-  console.log("data", data)
 
-  const pushupsByDay = useMemo(() => {
+  const sortedData = useMemo(() => {
     if (!data) return []
-    const result = data.reduce((acc: any, curr) => {
-      if (curr.date) {
-        const date = new Date(curr.date).toISOString().substring(0, 10)
-        const newDate = { date, number: curr.number, day: curr.day }
-        if (!acc[date]) acc[date] = newDate
-        else acc[date].number += curr.number
-      }
-      return acc
-    }, {})
-
-    const sortedResult = Object.values(result).sort((a: any, b: any) => {
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-      const dayOfWeekA = daysOfWeek.indexOf(a?.day)
-      const dayOfWeekB = daysOfWeek.indexOf(b?.day)
-      return dayOfWeekA - dayOfWeekB
-    })
-    console.log("sorted", sortedResult)
-
-    return sortedResult
+    return sortByDate(data)
   }, [data])
 
-  console.log(pushupsByDay)
-  // func
+  const totalAndAvg = useMemo(() => {
+    if (!data) return []
+    return getTotalAndAvgPushups(data)
+  }, [data])
+
+  const maxPushupsPerDay = useMemo(() => {
+    if (!data) return []
+    return getMaxDailyPushups(data)
+  }, [data])
+
+  const pushupCols = [
+    {
+      field: "date",
+      headerName: "Date",
+      flex: 1,
+    },
+    {
+      field: "number",
+      headerName: "Set total",
+      flex: 0.5,
+    },
+  ]
 
   return (
     <>
@@ -70,7 +78,7 @@ const Row1 = (props: Props) => {
           <AreaChart
             width={500}
             height={400}
-            data={pushupsByDay}
+            data={maxPushupsPerDay}
             margin={{
               top: 15,
               right: 25,
@@ -105,7 +113,7 @@ const Row1 = (props: Props) => {
               </linearGradient>
             </defs>
             <XAxis
-              dataKey="day"
+              dataKey="date"
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
@@ -118,7 +126,7 @@ const Row1 = (props: Props) => {
             <Tooltip />
             <Area
               type="monotone"
-              dataKey="number"
+              dataKey="maxPushups"
               dot={true}
               stroke={palette.primary.main}
               fillOpacity={1}
@@ -135,17 +143,11 @@ const Row1 = (props: Props) => {
           </AreaChart>
         </ResponsiveContainer>
       </DashboardBox>
-      <DashboardBox gridArea="b">
-        <BoxHeader
-          title="Total pushups vs set"
-          subtitle="top line represents revenue, bottom line represents expenses"
-          sideText="+4%"
-        />
-        {/* <ResponsiveContainer width="100%" height="100%">
+      <DashboardBox gridArea="d">
+        <BoxHeader title="Daily pushups vs set average" subtitle="Daily" />
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            width={500}
-            height={400}
-            data={revenueProfit}
+            data={totalAndAvg}
             margin={{
               top: 20,
               right: 0,
@@ -155,12 +157,13 @@ const Row1 = (props: Props) => {
           >
             <CartesianGrid vertical={false} stroke={palette.grey[800]} />
             <XAxis
-              dataKey="name"
+              dataKey="date"
               tickLine={false}
               style={{ fontSize: "10px" }}
             />
             <YAxis
               yAxisId="left"
+              orientation="left"
               tickLine={false}
               axisLine={false}
               style={{ fontSize: "10px" }}
@@ -173,78 +176,59 @@ const Row1 = (props: Props) => {
               style={{ fontSize: "10px" }}
             />
             <Tooltip />
-            <Legend
-              height={20}
-              wrapperStyle={{
-                margin: "0 0 10px 0",
-              }}
-            />
             <Line
+              name="Total Pushups"
               yAxisId="left"
               type="monotone"
-              dataKey="profit"
+              dataKey="totalPushups"
               stroke={palette.tertiary[500]}
             />
             <Line
+              name="Average Pushups"
               yAxisId="right"
               type="monotone"
-              dataKey="revenue"
+              dataKey="avgPushups"
               stroke={palette.primary.main}
             />
           </LineChart>
-        </ResponsiveContainer> */}
+        </ResponsiveContainer>
       </DashboardBox>
-      <DashboardBox gridArea="c">
+      <DashboardBox gridArea="g">
         <BoxHeader
-          title="Revenue Month by Month"
-          subtitle="graph representing the revenue month by month"
-          sideText="+4%"
+          title="List of Products"
+          sideText={`${data?.length} sets, ${totalAndAvg.length} days`}
         />
-        {/* <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            width={500}
-            height={300}
-            data={revenue}
-            margin={{
-              top: 17,
-              right: 15,
-              left: -5,
-              bottom: 58,
-            }}
-          >
-            <defs>
-              <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor={palette.primary[300]}
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor={palette.primary[300]}
-                  stopOpacity={0}
-                />
-              </linearGradient>
-            </defs>
-            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
-            <XAxis
-              dataKey="name"
-              axisLine={false}
-              tickLine={false}
-              style={{ fontSize: "10px" }}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              style={{ fontSize: "10px" }}
-            />
-            <Tooltip />
-            <Bar dataKey="revenue" fill="url(#colorRevenue)" />
-          </BarChart>
-        </ResponsiveContainer> */}
+        <Box
+          mt="0.5rem"
+          p="0 0.5rem"
+          height="75%"
+          sx={{
+            "& .MuiDataGrid-root": {
+              color: palette.grey[300],
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: `1px solid ${palette.grey[800]} !important`,
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              borderBottom: `1px solid ${palette.grey[800]} !important`,
+            },
+            "& .MuiDataGrid-columnSeparator": {
+              visibility: "hidden",
+            },
+          }}
+        >
+          <DataGrid
+            columnHeaderHeight={25}
+            rowHeight={35}
+            hideFooter={true}
+            rows={sortedData || []}
+            columns={pushupCols}
+          />
+        </Box>
       </DashboardBox>
     </>
   )
 }
 
-export default Row1
+export default Col1

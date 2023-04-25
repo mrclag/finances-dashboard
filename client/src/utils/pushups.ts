@@ -29,16 +29,20 @@ interface DateData {
   [key: string]: any
 }
 
-export const sortByDate = (data: DateData[] | undefined, dir = "asc") => {
+export const sortByDate = (
+  data: DateData[] | undefined,
+  dir = "asc",
+  field = "date"
+) => {
   if (!data) return []
   const rowsWithDates = removeEmptyValues(data)
   if (dir === "asc")
     return rowsWithDates.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      (a, b) => new Date(a[field]).getTime() - new Date(b[field]).getTime()
     )
   else
     return rowsWithDates.sort(
-      (b, a) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      (b, a) => new Date(a[field]).getTime() - new Date(b[field]).getTime()
     )
 }
 

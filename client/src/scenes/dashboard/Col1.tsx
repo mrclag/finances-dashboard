@@ -66,6 +66,13 @@ const Col1 = (props: Props) => {
     },
   ]
 
+  const formatDateLabel = (dateStr: any) => {
+    const date = new Date(dateStr)
+    const parts = date.toDateString().split(" ")
+
+    return `${parts[0].slice(0, 2)} ${parseInt(parts[2])}`
+  }
+
   return (
     <>
       <DashboardBox gridArea="a">
@@ -116,6 +123,7 @@ const Col1 = (props: Props) => {
               dataKey="date"
               tickLine={false}
               style={{ fontSize: "10px" }}
+              tickFormatter={formatDateLabel}
             />
             <YAxis
               tickLine={false}
@@ -159,6 +167,7 @@ const Col1 = (props: Props) => {
             <XAxis
               dataKey="date"
               tickLine={false}
+              tickFormatter={formatDateLabel}
               style={{ fontSize: "10px" }}
             />
             <YAxis

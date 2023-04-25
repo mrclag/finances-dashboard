@@ -1,7 +1,12 @@
 import BoxHeader from "@/components/BoxHeader"
 import DashboardBox from "@/components/DashboardBox"
 import FlexBetween from "@/components/FlexBetween"
-import { useGetHandstandsQuery, useGetKpisQuery } from "@/state/api"
+import {
+  useGetBacklogQuery,
+  useGetHandstandsQuery,
+  useGetKpisQuery,
+} from "@/state/api"
+
 import {
   getMaxDailyPushups,
   getTotalAndAvgPushups,
@@ -40,6 +45,8 @@ interface Result {
 
 const Col2 = (props: Props) => {
   const { data } = useGetHandstandsQuery()
+  const { data: data2 } = useGetBacklogQuery()
+
   const { palette } = useTheme()
   const pieColors = [palette.primary[800], palette.primary[300]]
 
@@ -47,6 +54,11 @@ const Col2 = (props: Props) => {
     if (!data) return []
     return sortByDate(data)
   }, [data])
+
+  const sortedData2 = useMemo(() => {
+    if (!data2) return []
+    return sortByDate(data2, "desc", "completed")
+  }, [data2])
 
   const totalAndAvg = useMemo(() => {
     if (!data) return []
@@ -60,14 +72,24 @@ const Col2 = (props: Props) => {
 
   const pushupCols = [
     {
-      field: "date",
-      headerName: "Date",
-      flex: 1,
+      field: "name",
+      headerName: "Name",
+      flex: 2,
     },
     {
-      field: "number",
-      headerName: "Set total",
+      field: "priority",
+      headerName: "Priority",
       flex: 0.5,
+    },
+    {
+      field: "points",
+      headerName: "Points",
+      flex: 0.5,
+    },
+    {
+      field: "completedDate",
+      headerName: "Date",
+      flex: 0.6,
     },
   ]
 
@@ -176,8 +198,8 @@ const Col2 = (props: Props) => {
       </DashboardBox>
       <DashboardBox gridArea="h">
         <BoxHeader
-          title="List of Products"
-          sideText={`${data?.length} sets, ${totalAndAvg.length} days`}
+          title="Tasks this week"
+          sideText={`${data2?.length} tasks`}
         />
         <Box
           mt="1rem"
@@ -203,7 +225,7 @@ const Col2 = (props: Props) => {
             columnHeaderHeight={25}
             rowHeight={35}
             hideFooter={true}
-            rows={sortedData || []}
+            rows={data2 || []}
             columns={pushupCols}
           />
         </Box>

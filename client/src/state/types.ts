@@ -64,3 +64,12 @@ export interface GetHandstandsResponse {
   tags: string | undefined
   name: string | undefined
 }
+
+export interface GetBacklogResponse {
+  id: string
+  day?: string | null
+  date: string | undefined
+  number: number | null
+  tags: string | undefined
+  name: string | undefined
+}

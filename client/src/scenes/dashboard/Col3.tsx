@@ -66,7 +66,7 @@ const Row1 = (props: Props) => {
           subtitle="By week"
           // sideText="+4%"
         />
-        <ResponsiveContainer width="100%" height="100%">
+        {/* <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             width={500}
             height={400}
@@ -113,7 +113,6 @@ const Row1 = (props: Props) => {
               tickLine={false}
               axisLine={{ strokeWidth: "0" }}
               style={{ fontSize: "10px" }}
-              // domain={[8000, 23000]}
             />
             <Tooltip />
             <Area
@@ -133,7 +132,7 @@ const Row1 = (props: Props) => {
               fill="url(#colorExpenses)"
             />
           </AreaChart>
-        </ResponsiveContainer>
+        </ResponsiveContainer> */}
       </DashboardBox>
       <DashboardBox gridArea="b">
         <BoxHeader

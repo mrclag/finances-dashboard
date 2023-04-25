@@ -55,3 +55,12 @@ export interface GetTransactionsResponse {
   createdAt: string
   updatedAt: string
 }
+
+export interface GetHandstandsResponse {
+  id: string
+  day: string | null
+  date: string | undefined
+  number: number | null
+  tags: string | undefined
+  name: string | undefined
+}

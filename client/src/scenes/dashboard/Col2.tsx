@@ -6,6 +6,7 @@ import {
   useGetHandstandsQuery,
   useGetKpisQuery,
 } from "@/state/api"
+
 import {
   getMaxDailyPushups,
   getTotalAndAvgPushups,
@@ -45,7 +46,7 @@ interface Result {
 const Col2 = (props: Props) => {
   const { data } = useGetHandstandsQuery()
   const { data: data2 } = useGetBacklogQuery()
-  console.log("data2", data2)
+
   const { palette } = useTheme()
   const pieColors = [palette.primary[800], palette.primary[300]]
 
@@ -53,6 +54,7 @@ const Col2 = (props: Props) => {
     if (!data) return []
     return sortByDate(data)
   }, [data])
+
   const sortedData2 = useMemo(() => {
     if (!data2) return []
     return sortByDate(data2, "desc", "completed")

@@ -21,6 +21,7 @@ router.get("/backlog", async (req, res) => {
     const backlog = await getBacklogDB(process.env.NOTION_BACKLOG_ID)
     // console.log(backlog)
     const newObj = backlog.map(fromNotionBacklogObject)
+
     res.status(200).json(newObj)
   } catch (error) {
     res.status(404).json({ message: error.message })

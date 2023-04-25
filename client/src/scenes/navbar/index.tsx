@@ -32,7 +32,7 @@ const Navbar = (props: Props) => {
             Dashboard
           </Link>
         </Box>
-        <Box sx={{ "&:hover": { color: palette.primary[100] } }}>
+        {/* <Box sx={{ "&:hover": { color: palette.primary[100] } }}>
           <Link
             onClick={() => setSelected("predictions")}
             to="/predictions"
@@ -43,7 +43,7 @@ const Navbar = (props: Props) => {
           >
             Predictions
           </Link>
-        </Box>
+        </Box> */}
       </FlexBetween>
     </FlexBetween>
   )

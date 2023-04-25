@@ -42,7 +42,7 @@ export const tokens = {
     light: "#2d2d34",
     main: "#1f2026",
   },
-};
+}
 
 // mui theme settings
 export const themeSettings = {
@@ -69,38 +69,38 @@ export const themeSettings = {
     },
   },
   typography: {
-    fontFamily: ["Inter", "sans-serif"].join(","),
+    fontFamily: ["Urbanist", "sans-serif"].join(","),
     fontSize: 12,
     h1: {
-      fontFamily: ["Inter", "sans-serif"].join(","),
+      fontFamily: ["Urbanist", "sans-serif"].join(","),
       fontSize: 32,
     },
     h2: {
-      fontFamily: ["Inter", "sans-serif"].join(","),
+      fontFamily: ["Urbanist", "sans-serif"].join(","),
       fontSize: 24,
     },
     h3: {
-      fontFamily: ["Inter", "sans-serif"].join(","),
+      fontFamily: ["Urbanist", "sans-serif"].join(","),
       fontSize: 20,
       fontWeight: 800,
       color: tokens.grey[200],
     },
     h4: {
-      fontFamily: ["Inter", "sans-serif"].join(","),
+      fontFamily: ["Urbanist", "sans-serif"].join(","),
       fontSize: 14,
       fontWeight: 600,
       color: tokens.grey[300],
     },
     h5: {
-      fontFamily: ["Inter", "sans-serif"].join(","),
+      fontFamily: ["Urbanist", "sans-serif"].join(","),
       fontSize: 12,
       fontWeight: 400,
       color: tokens.grey[500],
     },
     h6: {
-      fontFamily: ["Inter", "sans-serif"].join(","),
+      fontFamily: ["Urbanist", "sans-serif"].join(","),
       fontSize: 10,
       color: tokens.grey[700],
     },
   },
-};
+}

@@ -8,10 +8,19 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY })
 
 router.get("/handstands", async (req, res) => {
   try {
-    const products = await getDB()
-    console.log(products)
+    const products = await getHandstandDB(process.env.NOTION_DATABASE_ID)
     const newObj = products.map(fromNotionObject)
-    console.log("new", newObj)
+    res.status(200).json(newObj)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+})
+
+router.get("/backlog", async (req, res) => {
+  try {
+    const backlog = await getBacklogDB(process.env.NOTION_BACKLOG_ID)
+    // console.log(backlog)
+    const newObj = backlog.map(fromNotionBacklogObject)
     res.status(200).json(newObj)
   } catch (error) {
     res.status(404).json({ message: error.message })
@@ -20,34 +29,70 @@ router.get("/handstands", async (req, res) => {
 
 export default router
 
-function notionPropertiesById(properties) {
-  return Object.values(properties).reduce((obj, property) => {
-    const { id, ...rest } = property
-    return { ...obj, [id]: rest }
-  }, {})
-}
-
-export async function getDB() {
+export async function getHandstandDB() {
   const notionPages = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID,
+
     // sorts: [{ property: process.env.NOTION_VOTES_ID, direction: "descending" }],
   })
   return notionPages.results
-
-  // return notionPages.results.map(fromNotionObject)
+}
+export async function getBacklogDB() {
+  const notionPages = await notion.databases.query({
+    database_id: process.env.NOTION_BACKLOG_ID,
+    filter: {
+      property: "Status",
+      select: {
+        equals: "Done",
+      },
+    },
+    // sorts: [{ property: process.env.NOTION_VOTES_ID, direction: "descending" }],
+  })
+  return notionPages.results
 }
 
 function fromNotionObject(notionPage) {
-  console.log("page", notionPage)
-  const { Date, Day, Name, Number, Tags } = notionPage.properties
-  console.log(Tags)
+  const {
+    Date: date,
+    Day: day,
+    Name: name,
+    Number: number,
+    Tags: tags,
+  } = notionPage.properties
 
   return {
     id: notionPage.id,
-    day: Day.formula?.string,
-    date: Date.date?.start,
-    number: Number.number,
-    tags: Tags.select?.name,
-    name: Name.title[0]?.plain_text,
+    day: day.formula?.string,
+    date: date.date?.start,
+    number: number.number,
+    tags: tags.select?.name,
+    name: name.title[0]?.plain_text,
+  }
+}
+
+function fromNotionBacklogObject(notionPage) {
+  const {
+    Task: task,
+    Completed: completed,
+    Priority: priority,
+    Points: points,
+    Type: type,
+    Status: status,
+  } = notionPage.properties
+  const estTime = notionPage.properties["Est. Time"]
+
+  // console.log(estTime)
+  // console.log(notionPage.properties.completed)
+  // console.log("completed", completed?.date?.start)
+
+  return {
+    id: notionPage.id,
+    name: task.title[0]?.plain_text,
+    completedDate: completed?.date?.start,
+    points: Number(points.select?.name),
+    estTime: estTime.select?.name,
+    priority: priority.select?.name,
+    type: type.select?.name,
+    status: status.select?.name,
   }
 }

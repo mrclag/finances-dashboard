@@ -4,12 +4,13 @@ import {
   GetProductsResponse,
   GetTransactionsResponse,
   GetHandstandsResponse,
+  GetBacklogResponse,
 } from "./types"
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL }),
   reducerPath: "main",
-  tagTypes: ["Kpis", "Products", "Transactions", "Handstands"],
+  tagTypes: ["Kpis", "Products", "Transactions", "Handstands", "Backlog"],
   endpoints: (build) => ({
     getKpis: build.query<Array<GetKpisResponse>, void>({
       query: () => "kpi/kpis/",
@@ -27,6 +28,10 @@ export const api = createApi({
       query: () => "notion/handstands/",
       providesTags: ["Handstands"],
     }),
+    getBacklog: build.query<Array<GetBacklogResponse>, void>({
+      query: () => "notion/backlog/",
+      providesTags: ["Backlog"],
+    }),
   }),
 })
 
@@ -35,4 +40,5 @@ export const {
   useGetProductsQuery,
   useGetTransactionsQuery,
   useGetHandstandsQuery,
+  useGetBacklogQuery,
 } = api

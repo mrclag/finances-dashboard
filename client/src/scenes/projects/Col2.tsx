@@ -6,6 +6,12 @@ import {
   useGetHandstandsQuery,
   useGetKpisQuery,
 } from "@/state/api"
+
+import {
+  getMaxDailyPushups,
+  getTotalAndAvgPushups,
+  sortByDate,
+} from "@/utils/pushups"
 import { MonitorHeart } from "@mui/icons-material"
 import { Box, Typography } from "@mui/material"
 import { useTheme } from "@mui/system"
@@ -37,11 +43,32 @@ interface Result {
   name?: string
 }
 
-const Col3 = (props: Props) => {
+const Col2 = (props: Props) => {
   const { data } = useGetHandstandsQuery()
-  const { palette } = useTheme()
   const { data: data2 } = useGetBacklogQuery()
+
+  const { palette } = useTheme()
   const pieColors = [palette.primary[800], palette.primary[300]]
+
+  const sortedData = useMemo(() => {
+    if (!data) return []
+    return sortByDate(data)
+  }, [data])
+
+  const sortedData2 = useMemo(() => {
+    if (!data2) return []
+    return sortByDate(data2, "desc", "completed")
+  }, [data2])
+
+  const totalAndAvg = useMemo(() => {
+    if (!data) return []
+    return getTotalAndAvgPushups(data)
+  }, [data])
+
+  const pieData = [
+    { name: "Group A", value: 600 },
+    { name: "Group B", value: 400 },
+  ]
 
   const pushupCols = [
     {
@@ -66,48 +93,63 @@ const Col3 = (props: Props) => {
     },
   ]
 
-  const pushupsByDay = useMemo(() => {
-    if (!data) return []
-    const result = data.reduce((acc: any, curr) => {
-      if (curr.date) {
-        const date = new Date(curr.date).toISOString().substring(0, 10)
-        const newDate = { date, number: curr.number, day: curr.day }
-        if (!acc[date]) acc[date] = newDate
-        else acc[date].number += curr.number
-      }
-      return acc
-    }, {})
-
-    const sortedResult = Object.values(result).sort((a: any, b: any) => {
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-      const dayOfWeekA = daysOfWeek.indexOf(a?.day)
-      const dayOfWeekB = daysOfWeek.indexOf(b?.day)
-      return dayOfWeekA - dayOfWeekB
-    })
-    console.log("sorted", sortedResult)
-
-    return sortedResult
-  }, [data])
-
-  console.log(pushupsByDay)
-
-  const pieData = [
-    { name: "Group A", value: 600 },
-    { name: "Group B", value: 400 },
-  ]
-
-  // func
-
   return (
     <>
-      {/* <DashboardBox gridArea="a">
+      <DashboardBox gridArea="b">
         <BoxHeader
-          title="Max Pushups"
-          subtitle="By week"
-          // sideText="+4%"
+          title="Story points completed by Project"
+          subtitle="top line represents revenue, bottom line represents expenses"
+          sideText="+4%"
         />
-      </DashboardBox> */}
-      <DashboardBox gridArea="c">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={totalAndAvg}
+            margin={{
+              top: 20,
+              right: 0,
+              left: -10,
+              bottom: 55,
+            }}
+          >
+            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              style={{ fontSize: "10px" }}
+            />
+            <YAxis
+              yAxisId="left"
+              orientation="left"
+              tickLine={false}
+              axisLine={false}
+              style={{ fontSize: "10px" }}
+            />
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              tickLine={false}
+              axisLine={false}
+              style={{ fontSize: "10px" }}
+            />
+            <Tooltip />
+            <Line
+              name="Total Pushups"
+              yAxisId="left"
+              type="monotone"
+              dataKey="totalPushups"
+              stroke={palette.tertiary[500]}
+            />
+            <Line
+              name="Average Pushups"
+              yAxisId="right"
+              type="monotone"
+              dataKey="avgPushups"
+              stroke={palette.primary.main}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </DashboardBox>
+      <DashboardBox gridArea="e">
         <BoxHeader title="Campaigns and Targets" sideText="+4%" />
         <FlexBetween mt="0.25rem" gap="1.5rem" pr="1rem">
           <PieChart
@@ -154,7 +196,7 @@ const Col3 = (props: Props) => {
           </Box>
         </FlexBetween>
       </DashboardBox>
-      <DashboardBox gridArea="f">
+      <DashboardBox gridArea="h">
         <BoxHeader
           title="Tasks this week"
           sideText={`${data2?.length} tasks`}
@@ -162,7 +204,7 @@ const Col3 = (props: Props) => {
         <Box
           mt="1rem"
           p="0 0.5rem"
-          height="90%"
+          height="80%"
           sx={{
             "& .MuiDataGrid-root": {
               color: palette.grey[300],
@@ -192,4 +234,4 @@ const Col3 = (props: Props) => {
   )
 }
 
-export default Col3
+export default Col2

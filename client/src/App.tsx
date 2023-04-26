@@ -7,6 +7,8 @@ import Navbar from "@/scenes/navbar"
 import Dashboard from "@/scenes/dashboard"
 import Predictions from "./scenes/predictions"
 import Sidebar from "./components/sidebar"
+import Fitness from "./scenes/fitness"
+import Projects from "./scenes/projects"
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings), [])
@@ -19,9 +21,11 @@ function App() {
           <CssBaseline />
           <Box width="100%" height="100%" display={isMobile ? "block" : "flex"}>
             {isMobile ? <Navbar /> : <Sidebar />}
-            <Box sx={{ padding: "1rem 2rem 4rem 2rem" }}>
+            <Box sx={{ padding: "1rem", flex: "1" }}>
               <Routes>
                 <Route path="/" element={<Dashboard />} />
+                <Route path="/fitness" element={<Fitness />} />
+                <Route path="/projects" element={<Projects />} />
                 <Route path="/predictions" element={<Predictions />} />
               </Routes>
             </Box>

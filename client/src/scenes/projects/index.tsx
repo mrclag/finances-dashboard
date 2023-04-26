@@ -6,16 +6,16 @@ import Col3 from "./Col3"
 type Props = {}
 
 const gridTemplateLargeScreens = `
-  "a b c"
-  "a b c"
-  "a b f"
-  "a b f"
-  "d e f"
-  "d e f"
-  "d h f"
-  "g h f"
-  "g h f"
-  "g h f"
+  "b b c"
+  "b b c"
+  "b b f"
+  "b b f"
+  "e e f"
+  "e e f"
+  "h h f"
+  "h h f"
+  "h h f"
+  "h h f"
 `
 const gridTemplateSmallScreens = `
   "a"
@@ -50,7 +50,7 @@ const gridTemplateSmallScreens = `
   "j"
 `
 
-const Dashboard = (props: Props) => {
+const Projects = (props: Props) => {
   const { palette } = useTheme()
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)")
   return (
@@ -76,11 +76,11 @@ const Dashboard = (props: Props) => {
       {/* <Row1 /> */}
       {/* <Row2 /> */}
       {/* <Row3 /> */}
-      <Col1 />
+      {/* <Col1 /> */}
       <Col2 />
       <Col3 />
     </Box>
   )
 }
 
-export default Dashboard
+export default Projects

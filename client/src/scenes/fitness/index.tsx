@@ -1,21 +1,24 @@
+import DashboardBox from "@/components/DashboardBox"
 import { Box, useMediaQuery, useTheme } from "@mui/material"
-import Col1 from "./Col1"
-import Col2 from "./Col2"
-import Col3 from "./Col3"
+import DailyVsAvg from "./DailyVsAvg"
+import SetDataTable from "./SetDataTable"
+import SetMaxGraph from "./SetMaxGraph"
+import StackedBarBreakdown from "./StackedBarBreakdown"
+import TotalSets from "./TotalSets"
 
 type Props = {}
 
 const gridTemplateLargeScreens = `
-  "a b c"
-  "a b c"
-  "a b f"
-  "a b f"
-  "d e f"
-  "d e f"
-  "d h f"
-  "g h f"
-  "g h f"
-  "g h f"
+  "a a c"
+  "a a c"
+  "a a f"
+  "a a f"
+  "d d f"
+  "d d f"
+  "d d f"
+  "g g f"
+  "g g f"
+  "g g f"
 `
 const gridTemplateSmallScreens = `
   "a"
@@ -50,7 +53,7 @@ const gridTemplateSmallScreens = `
   "j"
 `
 
-const Dashboard = (props: Props) => {
+const Fitness = (props: Props) => {
   const { palette } = useTheme()
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)")
   return (
@@ -62,7 +65,7 @@ const Dashboard = (props: Props) => {
       sx={
         isAboveMediumScreens
           ? {
-              gridTemplateColumns: "repeat(2, minmax(370px, 1fr))",
+              gridTemplateColumns: "repeat(3, 1fr)",
               gridTemplateRows: "repeat(10, minmax(60px, 1fr))",
               gridTemplateAreas: gridTemplateLargeScreens,
             }
@@ -73,14 +76,23 @@ const Dashboard = (props: Props) => {
             }
       }
     >
-      {/* <Row1 /> */}
-      {/* <Row2 /> */}
-      {/* <Row3 /> */}
-      <Col1 />
-      <Col2 />
-      <Col3 />
+      <DashboardBox gridArea="g">
+        <SetMaxGraph />
+      </DashboardBox>
+      <DashboardBox gridArea="d">
+        <DailyVsAvg />
+      </DashboardBox>
+      <DashboardBox gridArea="a">
+        <StackedBarBreakdown />
+      </DashboardBox>
+      <DashboardBox gridArea="c">
+        <TotalSets />
+      </DashboardBox>
+      <DashboardBox gridArea="f">
+        <SetDataTable />
+      </DashboardBox>
     </Box>
   )
 }
 
-export default Dashboard
+export default Fitness

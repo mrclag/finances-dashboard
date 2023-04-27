@@ -20,7 +20,7 @@ import {
 
 type Props = {}
 
-const DailyVsAvg = (props: Props) => {
+const SetMax = (props: Props) => {
   const { data } = useGetHandstandsQuery()
   const { palette } = useTheme()
 
@@ -37,7 +37,7 @@ const DailyVsAvg = (props: Props) => {
           data={allDailyValues}
           margin={{
             top: 20,
-            right: 0,
+            right: 20,
             left: -10,
             bottom: 45,
           }}
@@ -56,33 +56,29 @@ const DailyVsAvg = (props: Props) => {
             axisLine={false}
             style={{ fontSize: "10px" }}
           />
-          <YAxis
-            yAxisId="right"
-            orientation="right"
-            tickLine={false}
-            axisLine={false}
-            style={{ fontSize: "10px" }}
-          />
           <Tooltip />
           <Line
-            name="Total Pushups"
-            yAxisId="left"
+            name="Max Pushups"
             type="monotone"
+            yAxisId="left"
+            dot={false}
             dataKey="pushups"
             stroke={palette.primary[300]}
           />
           <Line
-            name="Total Pushups"
-            yAxisId="left"
+            name="Max Pullups"
             type="monotone"
+            dot={false}
             dataKey="pullups"
+            yAxisId="left"
             stroke={palette.secondary[300]}
           />
           <Line
-            name="Average Pushups"
-            yAxisId="right"
+            name="Max Length Handstand"
             type="monotone"
+            dot={false}
             dataKey="handstands"
+            yAxisId="left"
             stroke={palette.tertiary[500]}
           />
         </LineChart>
@@ -91,4 +87,4 @@ const DailyVsAvg = (props: Props) => {
   )
 }
 
-export default DailyVsAvg
+export default SetMax

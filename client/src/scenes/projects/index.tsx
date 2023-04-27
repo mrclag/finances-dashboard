@@ -1,7 +1,8 @@
+import DashboardBox from "@/components/DashboardBox"
 import { Box, useMediaQuery, useTheme } from "@mui/material"
-import Col1 from "./Col1"
-import Col2 from "./Col2"
-import Col3 from "./Col3"
+import KPISection from "./KPISection"
+import PointsByProject from "./PointsByProject"
+import TaskDataTable from "./TaskDataTable"
 
 type Props = {}
 
@@ -51,7 +52,6 @@ const gridTemplateSmallScreens = `
 `
 
 const Projects = (props: Props) => {
-  const { palette } = useTheme()
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)")
   return (
     <Box
@@ -73,12 +73,21 @@ const Projects = (props: Props) => {
             }
       }
     >
-      {/* <Row1 /> */}
-      {/* <Row2 /> */}
-      {/* <Row3 /> */}
-      {/* <Col1 /> */}
-      <Col2 />
-      <Col3 />
+      <DashboardBox gridArea="b">
+        <PointsByProject />
+      </DashboardBox>
+      <DashboardBox gridArea="e">
+        <KPISection />
+      </DashboardBox>
+      <DashboardBox gridArea="h">
+        <TaskDataTable />
+      </DashboardBox>
+      <DashboardBox gridArea="c">
+        <KPISection />
+      </DashboardBox>
+      <DashboardBox gridArea="f">
+        <TaskDataTable />
+      </DashboardBox>
     </Box>
   )
 }

@@ -187,10 +187,9 @@ export const removeEmptyValues = (data: any[]) => {
 }
 
 export const formatDateLabel = (dateStr: any) => {
-  const date = new Date(dateStr)
+  const date = new Date(dateStr + " ")
   const parts = date.toDateString().split(" ")
-
-  return `${parts[0].slice(0, 2)} ${parseInt(parts[2])}`
+  return `${parts[0].slice(0, 3)} ${parts[1]} ${parseInt(parts[2])} `
 }
 
 export function getDataForThisWeek(data: any) {
@@ -219,6 +218,7 @@ export function getDataForThisWeek(data: any) {
     result.push(obj)
     currentDate.setDate(currentDate.getDate() + 1)
   }
+  console.log("RESULT", result)
 
   return result
 }

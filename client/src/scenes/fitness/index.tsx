@@ -1,8 +1,8 @@
 import DashboardBox from "@/components/DashboardBox"
 import { Box, useMediaQuery, useTheme } from "@mui/material"
-import DailyVsAvg from "./DailyVsAvg"
+import DailyVsAvg from "./SetMax"
 import SetDataTable from "./SetDataTable"
-import SetMaxGraph from "./SetMaxGraph"
+import SetMaxGraph from "./ExerciseVariance"
 import StackedBarBreakdown from "./StackedBarBreakdown"
 import TotalSets from "./TotalSets"
 

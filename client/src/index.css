@@ -46,3 +46,12 @@ a:active {
   width: 12rem !important;
   min-width: 12rem;
 }
+
+.MuiDataGrid-groupingCriteriaCellToggle {
+  margin-right: 0 !important;
+  padding: 0;
+  color: white !important;
+}
+.MuiDataGrid-groupingCriteriaCellToggle .MuiSvgIcon-root {
+  color: white !important;
+}

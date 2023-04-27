@@ -5,6 +5,7 @@ import {
   getAllDailyTotals,
   getDailyMaxValues,
   getMaxDailyPushups,
+  sortByDate,
 } from "@/utils/pushups"
 import { useTheme } from "@mui/system"
 import { useMemo } from "react"
@@ -43,7 +44,7 @@ const MaxSet = (props: Props) => {
         <AreaChart
           width={500}
           height={400}
-          data={allDailyValues}
+          data={sortByDate(allDailyValues)}
           margin={{
             top: 15,
             right: 25,

@@ -1,25 +1,19 @@
 import DashboardBox from "@/components/DashboardBox"
 import { Box, useMediaQuery, useTheme } from "@mui/material"
-import Row1 from "./Row1"
-import Row2 from "./Row2"
-import Row3 from "./Row3"
-import Col1 from "./Col1"
-import Col2 from "./Col2"
-import Col3 from "./Col3"
 
 type Props = {}
 
 const gridTemplateLargeScreens = `
   "a b c"
   "a b c"
-  "a b c"
+  "a b f"
   "a b f"
   "d e f"
   "d e f"
-  "d h i"
-  "g h i"
-  "g h j"
-  "g h j"
+  "d h f"
+  "g h f"
+  "g h f"
+  "g h f"
 `
 const gridTemplateSmallScreens = `
   "a"
@@ -55,14 +49,13 @@ const gridTemplateSmallScreens = `
 `
 
 const Dashboard = (props: Props) => {
-  const { palette } = useTheme()
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)")
   return (
     <Box
       width="100%"
       height="100%"
       display="grid"
-      gap="1.5rem"
+      gap="1rem"
       sx={
         isAboveMediumScreens
           ? {
@@ -77,12 +70,47 @@ const Dashboard = (props: Props) => {
             }
       }
     >
-      {/* <Row1 /> */}
-      {/* <Row2 /> */}
-      {/* <Row3 /> */}
-      <Col1 />
-      <Col2 />
-      {/* <Col3 /> */}
+      {/* col 1 */}
+      <DashboardBox gridArea="a"></DashboardBox>
+      <DashboardBox gridArea="d"></DashboardBox>
+      <DashboardBox gridArea="g"></DashboardBox>
+
+      {/* col 2 */}
+      <DashboardBox gridArea="b"></DashboardBox>
+      <DashboardBox gridArea="e"></DashboardBox>
+      <DashboardBox gridArea="h"></DashboardBox>
+
+      {/* col 3 */}
+      <DashboardBox gridArea="c"></DashboardBox>
+      <DashboardBox gridArea="f"></DashboardBox>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "#eee",
+          textAlign: "center",
+          display: "flex",
+          border: "1px solid #ccc",
+          borderRadius: "8px",
+          zIndex: "51",
+          fontSize: "16px",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          padding: "20px 30px",
+        }}
+      >
+        <div>In Progress... check out</div>
+        <a style={{ color: "blue", marginTop: "8px" }} href="/fitness">
+          Fitness
+        </a>
+        <a style={{ color: "blue", marginTop: "8px" }} href="/projects">
+          Projects
+        </a>
+      </div>
     </Box>
   )
 }

@@ -5,6 +5,9 @@ import { Link } from "react-router-dom"
 import logo from "../../assets/mlogo.png"
 import NavLink from "./NavLink"
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter"
+import ChevronRightIcon from "@mui/icons-material/ChevronRight"
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"
+import Toggle from "./Toggle"
 
 type Props = {}
 
@@ -59,7 +62,7 @@ const Sidebar = (props: Props) => {
             <NavLink to="/projects" name="Projects" icon="projects" />
           </div>
         </div>
-        <button onClick={() => setOpen(!open)}>Toggle</button>
+        <Toggle open={open} setOpen={setOpen} />
       </div>
     </div>
   )

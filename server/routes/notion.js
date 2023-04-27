@@ -82,13 +82,9 @@ function fromNotionBacklogObject(notionPage) {
   } = notionPage.properties
   const estTime = notionPage.properties["Est. Time"]
 
-  // console.log(estTime)
-  // console.log(notionPage.properties.completed)
-  // console.log("completed", completed?.date?.start)
-
   return {
     id: notionPage.id,
-    name: task.title[0]?.plain_text,
+    name: new Array(task.title[0]?.plain_text.length - 1).join("x"),
     completedDate: completed?.date?.start,
     points: Number(points.select?.name),
     estTime: estTime.select?.name,

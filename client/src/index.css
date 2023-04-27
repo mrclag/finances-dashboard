@@ -36,11 +36,22 @@ a:active {
 
 .nav,
 .nav-wrapper {
-  width: 4rem;
+  width: 4rem !important;
+  min-width: 4rem;
   transition: 0.3s;
 }
 
 .nav.open,
 .nav-wrapper.open {
-  width: 12rem;
+  width: 12rem !important;
+  min-width: 12rem;
+}
+
+.MuiDataGrid-groupingCriteriaCellToggle {
+  margin-right: 0 !important;
+  padding: 0;
+  color: white !important;
+}
+.MuiDataGrid-groupingCriteriaCellToggle .MuiSvgIcon-root {
+  color: white !important;
 }
